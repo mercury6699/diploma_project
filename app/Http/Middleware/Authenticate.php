@@ -14,6 +14,10 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
+//        $id = \Session::get("user_id")
+//        $user = Db:getUser($id)
+//        Session::set('user')
+
         if (! $request->expectsJson()) {
             return route('login');
         }

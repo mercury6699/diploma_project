@@ -12,17 +12,21 @@ class AuthController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     public function login(Request $request)
     {
+//        $user = Session::get("user_id", 555);
+//        \Cookie::set('id0', Session::getId());
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
         $credentials = $request->only('email', 'password');
         $token = Auth::attempt($credentials);
+
+
         if (!$token) {
             return response()->json([
                 'status' => 'error',
@@ -32,17 +36,18 @@ class AuthController extends Controller
 
         $user = Auth::user();
         return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'authorisation' => [
-                    'token' => $token,
-                    'type' => 'bearer',
-                ]
-            ]);
+            'status' => 'success',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
 
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodoController;
@@ -14,10 +14,18 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-Route::controller(TodoController::class)->group(function () {
-    Route::get('todos', 'index');
-    Route::post('todo', 'store');
-    Route::get('todo/{id}', 'show');
-    Route::put('todo/{id}', 'update');
-    Route::delete('todo/{id}', 'destroy');
+Route::controller(\App\Http\Controllers\CategoryController::class)->group(function () {
+    Route::get('categories', 'index');
+    Route::post('category', 'store');
+    Route::get('category/{category_id}', 'show');
+    Route::put('category/{category_id}', 'update');
+    Route::delete('category/{category_id}', 'destroy');
+});
+
+Route::controller(\App\Http\Controllers\CategoryController::class)->group(function () {
+    Route::get('sub_categories', 'index');
+    Route::post('sub_category', 'store');
+    Route::get('sub_category/{sub_category_id}', 'show');
+    Route::put('sub_category/{sub_category_id}', 'update');
+    Route::delete('sub_category/{sub_category_id}', 'destroy');
 });
