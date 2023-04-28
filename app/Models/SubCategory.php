@@ -14,6 +14,15 @@ class SubCategory extends Model
      * @param  \DateTimeInterface  $date
      * @return string
      */
+
+    protected $fillable = [
+        'title',
+        'description',
+        'content',
+        'category_id',
+        'created_by',
+        'updated_by',
+    ];
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
