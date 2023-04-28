@@ -22,10 +22,19 @@ Route::controller(\App\Http\Controllers\CategoryController::class)->group(functi
     Route::delete('category/{category_id}', 'destroy');
 });
 
-Route::controller(\App\Http\Controllers\CategoryController::class)->group(function () {
+Route::controller(\App\Http\Controllers\SubCategoryController::class)->group(function () {
     Route::get('sub_categories', 'index');
     Route::post('sub_category', 'store');
     Route::get('sub_category/{sub_category_id}', 'show');
     Route::put('sub_category/{sub_category_id}', 'update');
     Route::delete('sub_category/{sub_category_id}', 'destroy');
+});
+
+Route::controller(\App\Http\Controllers\VariableController::class)->group(function () {
+    Route::get('hochu-peremennyie', 'hochu_peremennyie');
+//    Route::get('sub_categories', 'index');
+//    Route::post('sub_category', 'store');
+//    Route::get('sub_category/{sub_category_id}', 'show');
+//    Route::put('sub_category/{sub_category_id}', 'update');
+//    Route::delete('sub_category/{sub_category_id}', 'destroy');
 });
