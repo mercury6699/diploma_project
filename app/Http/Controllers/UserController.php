@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function users_by_ids(Request $request): \Illuminate\Http\JsonResponse
     {
-        $history_user_ids = $request->input('user_ids') ?? [];
+        $history_user_ids = $request->input('ids') ?? [];
         $users = User::whereIn('id', $history_user_ids)->get();
 
         if ($users->isEmpty()) {
