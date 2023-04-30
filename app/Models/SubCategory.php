@@ -23,7 +23,7 @@ class SubCategory extends Model
         'created_by',
         'updated_by',
     ];
-    protected function serializeDate(\DateTimeInterface $date)
+    protected function serializeDate(\DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
     }
@@ -37,7 +37,7 @@ class SubCategory extends Model
      * Example: return $this->belongsTo(Post::class, 'post_id', 'id');
      *
      */
-    public function category()
+    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
