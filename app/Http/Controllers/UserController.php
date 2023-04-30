@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     public function users_by_ids(Request $request): \Illuminate\Http\JsonResponse
