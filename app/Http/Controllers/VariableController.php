@@ -26,7 +26,7 @@ class VariableController extends Controller
         ]);
     }
 
-    public function hochu_peremennyie(Request $request): \Illuminate\Http\JsonResponse
+    public function variables_by_ids(Request $request): \Illuminate\Http\JsonResponse
     {
         $vars = $request->input('vars');
 
