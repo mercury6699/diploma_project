@@ -14,7 +14,7 @@ class VariableController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     public function index(): \Illuminate\Http\JsonResponse
@@ -28,17 +28,17 @@ class VariableController extends Controller
 
     public function variables_by_ids(Request $request): \Illuminate\Http\JsonResponse
     {
-        $vars = $request->input('vars');
+        $ids = $request->input('ids');
 
-        $vars_response = Variable::findMany($vars);
+        $vars = Variable::findMany($ids);
 
-        if ($vars_response->isEmpty()) {
-            $vars_response = [];
+        if ($vars->isEmpty()) {
+            $vars = [];
         }
 
         return response()->json([
             'status' => 'success',
-            'vars' => $vars_response,
+            'vars' => $vars,
         ]);
     }
 

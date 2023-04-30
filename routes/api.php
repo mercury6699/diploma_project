@@ -1,9 +1,7 @@
 <?php
 
-//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TodoController;
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -37,4 +35,13 @@ Route::controller(\App\Http\Controllers\VariableController::class)->group(functi
     Route::get('variable/{variable_id}', 'show');
     Route::put('variable/{variable_id}', 'update');
     Route::delete('variable/{variable_id}', 'destroy');
+});
+
+Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
+    Route::get('users_by_ids', 'users_by_ids');
+//    Route::get('variables', 'index');
+//    Route::post('variable', 'store');
+//    Route::get('variable/{variable_id}', 'show');
+//    Route::put('variable/{variable_id}', 'update');
+//    Route::delete('variable/{variable_id}', 'destroy');
 });

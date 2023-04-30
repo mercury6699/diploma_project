@@ -58,6 +58,7 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
         'created_at',
+        'email_verified_at',
     ];
 
     /**
@@ -84,12 +85,12 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
     }
 
-    protected function serializeDate(\DateTimeInterface $date)
+    protected function serializeDate(\DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
     }

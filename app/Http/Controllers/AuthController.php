@@ -9,16 +9,13 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
-//        $user = Session::get("user_id", 555);
-//        \Cookie::set('id0', Session::getId());
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
