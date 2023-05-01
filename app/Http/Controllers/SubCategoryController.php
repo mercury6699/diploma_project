@@ -11,7 +11,7 @@ class SubCategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+//        $this->middleware('auth:api');
     }
 
     /**
@@ -21,7 +21,7 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        $sub_categories = SubCategory::all();
+        $sub_categories = SubCategory::with('posts')->get();
         return response()->json([
             'status' => 'success',
             'sub_categories' => $sub_categories,
@@ -67,7 +67,8 @@ class SubCategoryController extends Controller
      */
     public function show($sub_category_id)
     {
-        $sub_category = SubCategory::find($sub_category_id);
+//        $sub_category = SubCategory::find($sub_category_id);
+        $sub_category = SubCategory::with('posts')->find($sub_category_id);
         return response()->json([
             'status' => 'success',
             'sub_category' => $sub_category,

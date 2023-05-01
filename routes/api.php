@@ -37,11 +37,15 @@ Route::controller(\App\Http\Controllers\VariableController::class)->group(functi
     Route::delete('variable/{variable_id}', 'destroy');
 });
 
-Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
-    Route::get('users_by_ids', 'users_by_ids');
-//    Route::get('variables', 'index');
-//    Route::post('variable', 'store');
-//    Route::get('variable/{variable_id}', 'show');
+Route::controller(\App\Http\Controllers\PostController::class)->group(function () {
+    Route::get('posts', 'index');
+    Route::post('post', 'store');
+    Route::get('post/{post_id}', 'show');
 //    Route::put('variable/{variable_id}', 'update');
 //    Route::delete('variable/{variable_id}', 'destroy');
+});
+
+Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
+    Route::get('users_by_ids', 'users_by_ids');
+    Route::get('users', 'index');
 });

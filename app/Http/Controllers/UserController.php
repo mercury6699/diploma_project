@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Variable;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -26,4 +27,18 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function index(): \Illuminate\Http\JsonResponse
+    {
+        $users = User::all();
+        if ($users->isEmpty()) {
+            $users = [];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'users' => $users,
+        ]);
+    }
+
 }
