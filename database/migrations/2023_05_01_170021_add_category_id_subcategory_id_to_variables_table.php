@@ -12,11 +12,9 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('variables', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('value');
-            $table->timestamps();
+        Schema::table('variables', function (Blueprint $table) {
+            $table->integer('category_id');
+            $table->integer('sub_category_id');
         });
     }
 
@@ -27,6 +25,9 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('variables');
+        Schema::table('variables', function (Blueprint $table) {
+            $table->dropColumn('category_id');
+            $table->dropColumn('sub_category_id');
+        });
     }
 };

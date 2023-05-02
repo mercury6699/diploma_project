@@ -49,13 +49,17 @@ class VariableController extends Controller
 
         $name = $request->name;
         $value = $request->value;
+        $category_id = $request->category_id;
+        $sub_category_id = $request->sub_category_id;
 
         $vars = Variable::create([
-                'name' => $name,
-                'value' => $value,
-                'created_by' => $id,
-                'updated_by' => $id,
-            ]);
+            'name' => $name,
+            'value' => $value,
+            'category_id' => $category_id,
+            'sub_category_id' => $sub_category_id,
+            'created_by' => $id,
+            'updated_by' => $id,
+        ]);
 
         return response()->json([
             'status' => 'success',

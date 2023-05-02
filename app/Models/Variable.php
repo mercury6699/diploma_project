@@ -12,6 +12,8 @@ class Variable extends Model
     protected $fillable = [
         'name',
         'value',
+        'category_id',
+        'sub_category_id',
         'created_by',
         'updated_by',
     ];
