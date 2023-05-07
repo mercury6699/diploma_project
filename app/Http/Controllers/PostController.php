@@ -42,9 +42,15 @@ class PostController extends Controller
         $description = $request->input('description');
         $content = $request->input('content');
         $sub_category_id = $request->input('sub_category_id');
+        $variable_ids = $request->input('variable_ids');
+//        $variable_ids = $request;
+        $variable_ids = json_encode($variable_ids);
+//        dd($variable_ids, 'variable_ids');
+
 
         $id = Auth::id();
         $posts = Post::create([
+            'variable_ids' => $variable_ids,
             'title' => $title,
             'description' => $description,
             'content' => $content,

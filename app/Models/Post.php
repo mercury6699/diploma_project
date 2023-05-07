@@ -14,6 +14,7 @@ class Post extends Model
         'description',
         'content',
         'sub_category_id',
+        'variable_ids',
         'created_by',
         'updated_by',
     ];
