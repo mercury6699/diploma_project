@@ -40,4 +40,14 @@ class Category extends Model
     {
         return $this->hasMany(SubCategory::class);
     }
+
+//    public function posts()
+//    {
+//        return $this->sub_categories()->post;
+//    }
+
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasOneThrough
+    {
+        return $this->hasOneThrough(Post::class, SubCategory::class);
+    }
 }
