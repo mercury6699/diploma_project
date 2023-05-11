@@ -16,6 +16,7 @@ class Variable extends Model
         'sub_category_id',
         'created_by',
         'updated_by',
+        'variable_ids',
     ];
 
     protected function serializeDate(\DateTimeInterface $date): string
