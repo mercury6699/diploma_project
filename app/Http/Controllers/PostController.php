@@ -70,11 +70,17 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse|\Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show(Post $post_id)
     {
-        //
+        $posts = Post::find($post_id);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Post created successfully',
+            'posts' => $posts,
+        ]);
     }
 
     /**

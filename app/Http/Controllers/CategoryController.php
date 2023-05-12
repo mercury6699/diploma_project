@@ -73,12 +73,6 @@ class CategoryController extends Controller
             'description' => 'required|string|max:255',
         ]);
 
-//        var_dump(file_get_contents('php://input'));
-//        var_dump($request);
-//        var_dump($request->get('title'));
-//        var_dump($request->description);
-//        var_dump(Auth::id());
-//        die();
         $category = Category::with(['posts'])
             ->find($category_id);
         $category->title = $request->title;
