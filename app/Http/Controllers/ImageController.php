@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ImageController extends Controller
 {
@@ -33,38 +35,59 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
 
-        $path = $request->file('image')->store('images');
+        $image_path = $request->file('image')->store('images');
 
-        $images = Image::create(['path' => $path]);
+        $images = Image::create([
+            'path' => $image_path,
+        ]);
 
+//        $ip = '127.0.0.1';
+        $ip = '195.49.212.252';
+        $url = $ip . '/api/image/' . explode("/", $image_path)[1];
         return response()->json([
             'status' => 'success',
             'message' => 'Image created successfully',
             'images' => $images,
+            'url' => $url,
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Image  $image
+     * @param \App\Models\Image $image
      * @return \Illuminate\Http\Response
      */
-    public function show(Image $image)
+    public function show($file_name)
     {
-        //
+//        dd($file_name);
+        $path = storage_path('app/images/' . $file_name);
+
+        if (!\Illuminate\Support\Facades\File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+
+        $type = File::mimeType($path);
+
+        $response = Response::make($file,200);
+
+        $response->header("Content-Type", $type);
+
+        return $response;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Image  $image
+     * @param \App\Models\Image $image
      * @return \Illuminate\Http\Response
      */
     public function edit(Image $image)
@@ -75,8 +98,8 @@ class ImageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Image  $image
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Image $image
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Image $image)
@@ -87,7 +110,7 @@ class ImageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Image  $image
+     * @param \App\Models\Image $image
      * @return \Illuminate\Http\Response
      */
     public function destroy(Image $image)
