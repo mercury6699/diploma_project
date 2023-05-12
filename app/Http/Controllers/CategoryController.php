@@ -20,7 +20,7 @@ class CategoryController extends Controller
 //        var_dump(Auth::id());
 //        die();
 //        $categories = Category::with(['sub_categories', 'posts'])
-        $categories = Category::with(['posts'])
+        $categories = Category::with(['sub_categories'])
             ->get();
 //        $categories = Category::all();
         return response()->json([
@@ -39,7 +39,7 @@ class CategoryController extends Controller
 //        $id = auth()->user()->id;
         $id = Auth::id();
 //        dd($id);
-        $category = Category::with(['posts'])
+        $category = Category::with(['sub_categories'])
             ->create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -57,7 +57,7 @@ class CategoryController extends Controller
 
     public function show($category_id)
     {
-        $category = Category::with(['posts'])
+        $category = Category::with(['sub_categories'])
             ->find($category_id);
         return response()->json([
             'status' => 'success',
@@ -73,7 +73,7 @@ class CategoryController extends Controller
             'description' => 'required|string|max:255',
         ]);
 
-        $category = Category::with(['posts'])
+        $category = Category::with(['sub_categories'])
             ->find($category_id);
         $category->title = $request->title;
         $category->description = $request->description;
@@ -89,7 +89,7 @@ class CategoryController extends Controller
 
     public function destroy($category_id)
     {
-        $category = Category::with(['posts'])
+        $category = Category::with(['sub_categories'])
             ->find($category_id);
         $category->delete();
 
