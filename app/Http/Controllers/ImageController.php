@@ -57,7 +57,6 @@ class ImageController extends Controller
             'status' => 'success',
             'message' => 'Image created successfully',
             'images' => $images,
-            'url' => $url,
         ]);
     }
 
