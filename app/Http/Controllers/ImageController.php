@@ -43,13 +43,16 @@ class ImageController extends Controller
 
         $image_path = $request->file('image')->store('images');
 
-        $images = Image::create([
-            'path' => $image_path,
-        ]);
+
 
 //        $ip = '127.0.0.1';
         $ip = '195.49.212.252';
         $url = $ip . '/api/image/' . explode("/", $image_path)[1];
+        $images = Image::create([
+            'path' => $image_path,
+            'url' => $url,
+        ]);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Image created successfully',
