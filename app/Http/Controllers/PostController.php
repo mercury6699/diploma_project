@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Variable;
 use Illuminate\Http\JsonResponse;
@@ -43,10 +44,24 @@ class PostController extends Controller
         $content = $request->input('content');
         $sub_category_id = $request->input('sub_category_id');
         $variable_ids = $request->input('variable_ids');
-//        $variable_ids = $request;
         $variable_ids = json_encode($variable_ids);
-//        dd($variable_ids, 'variable_ids');
 
+        $path = $request->file('image')->store('test');
+        $a = Image::create(['path' => $path]);
+//        $blogPost->image()->save( Image::make(['path' => $path]) );
+
+        dd($path, "|||||||", $a);
+
+//        $validatedData = $request->validated();
+//        $validatedData['user_id'] = $request->user()->id;
+//        $blogPost = BlogPost::create($validatedData);
+//
+//
+//        if ($request->hasFile('thumbnail'))
+//        {
+//            $path = $request->file('thumbnail')->store('thumbnails');
+//            $blogPost->image()->save( Image::make(['path' => $path]) );
+//        }
 
         $id = Auth::id();
         $posts = Post::create([
@@ -72,10 +87,11 @@ class PostController extends Controller
      * @param \App\Models\Post $post
      * @return JsonResponse|\Illuminate\Http\Response
      */
-    public function show(Post $post_id)
+    public function show($post_id)
     {
         $posts = Post::find($post_id);
 
+//        dd($post_id,'post');
         return response()->json([
             'status' => 'success',
             'message' => 'Post created successfully',
