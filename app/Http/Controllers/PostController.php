@@ -46,11 +46,7 @@ class PostController extends Controller
         $variable_ids = $request->input('variable_ids');
         $variable_ids = json_encode($variable_ids);
 
-        $path = $request->file('image')->store('test');
-        $a = Image::create(['path' => $path]);
-//        $blogPost->image()->save( Image::make(['path' => $path]) );
 
-        dd($path, "|||||||", $a);
 
 //        $validatedData = $request->validated();
 //        $validatedData['user_id'] = $request->user()->id;

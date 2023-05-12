@@ -10,11 +10,15 @@ class ImageController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $images = Image::all();
+        return response()->json([
+            'status' => 'success',
+            'images' => $images,
+        ]);
     }
 
     /**
@@ -24,18 +28,26 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+
+        $path = $request->file('image')->store('images');
+
+        $images = Image::create(['path' => $path]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Image created successfully',
+            'images' => $images,
+        ]);
     }
 
     /**

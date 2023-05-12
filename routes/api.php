@@ -45,6 +45,14 @@ Route::controller(\App\Http\Controllers\PostController::class)->group(function (
 //    Route::delete('variable/{variable_id}', 'destroy');
 });
 
+Route::controller(\App\Http\Controllers\ImageController::class)->group(function () {
+    Route::get('images', 'index');
+    Route::post('image', 'store');
+//    Route::get('post/{post_id}', 'show');
+//    Route::put('variable/{variable_id}', 'update');
+//    Route::delete('variable/{variable_id}', 'destroy');
+});
+
 Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
     Route::get('users_by_ids', 'users_by_ids');
     Route::get('users', 'index');
