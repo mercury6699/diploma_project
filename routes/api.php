@@ -29,7 +29,7 @@ Route::controller(\App\Http\Controllers\SubCategoryController::class)->group(fun
 });
 
 Route::controller(\App\Http\Controllers\VariableController::class)->group(function () {
-    Route::get('variables_by_ids', 'variables_by_ids');
+    Route::post('variables_by_ids', 'variables_by_ids');
     Route::get('variables', 'index');
     Route::post('variable', 'store');
     Route::get('variable/{variable_id}', 'show');
@@ -54,6 +54,6 @@ Route::controller(\App\Http\Controllers\ImageController::class)->group(function 
 });
 
 Route::controller(\App\Http\Controllers\UserController::class)->group(function () {
-    Route::get('users_by_ids', 'users_by_ids');
+    Route::post('users_by_ids', 'users_by_ids');
     Route::get('users', 'index');
 });
