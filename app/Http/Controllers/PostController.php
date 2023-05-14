@@ -104,7 +104,8 @@ class PostController extends Controller
             $post_history->save();
         }
 
-        $PostHistory = PostHistory::find($post_history_id)->get();
+        $PostHistory = PostHistory::find($post_history_id);
+
 
         $post = Post::find($post_id);
 
@@ -115,6 +116,8 @@ class PostController extends Controller
         $post->variable_ids = $PostHistory->variable_ids;
         $post->updated_by = $PostHistory->created_by;
 
+        $PostHistory->is_current = true;
+        $PostHistory->save();
         $post->save();
 
         return response()->json([
