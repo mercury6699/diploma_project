@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\Variable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,13 @@ class VariableController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         $variables = Variable::all();
+        foreach ($variables as $var) {
+            $Category = Category::find($var->category_id);
+            $SubCategory = SubCategory::find($var->sub_category_id);
+            $var->category_name = $Category->title;
+            $var->sub_category_name = $SubCategory->title;
+        }
+
         return response()->json([
             'status' => 'success',
             'vars' => $variables,
@@ -30,15 +38,22 @@ class VariableController extends Controller
     {
         $ids = $request->input('ids');
 
-        $vars = Variable::findMany($ids);
+        $variables = Variable::findMany($ids);
 
-        if ($vars->isEmpty()) {
-            $vars = [];
+        if ($variables->isEmpty()) {
+            $variables = [];
+        }
+
+        foreach ($variables as $var) {
+            $Category = Category::find($var->category_id);
+            $SubCategory = SubCategory::find($var->sub_category_id);
+            $var->category_name = $Category->title;
+            $var->sub_category_name = $SubCategory->title;
         }
 
         return response()->json([
             'status' => 'success',
-            'vars' => $vars,
+            'vars' => $variables,
         ]);
     }
 
@@ -70,14 +85,21 @@ class VariableController extends Controller
 
     public function show($variable_id): \Illuminate\Http\JsonResponse
     {
-        $vars = Variable::find($variable_id);
-        if (is_null($vars)) {
-            $vars = [];
+        $variables = Variable::find($variable_id);
+        if (is_null($variables)) {
+            $variables = [];
+        }
+
+        foreach ($variables as $var) {
+            $Category = Category::find($var->category_id);
+            $SubCategory = SubCategory::find($var->sub_category_id);
+            $var->category_name = $Category->title;
+            $var->sub_category_name = $SubCategory->title;
         }
 
         return response()->json([
             'status' => 'success',
-            'vars' => $vars,
+            'vars' => $variables,
         ]);
     }
 

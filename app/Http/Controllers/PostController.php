@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use App\Models\Post;
+use App\Models\PostHistory;
 use App\Models\Variable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -46,19 +48,6 @@ class PostController extends Controller
         $variable_ids = $request->input('variable_ids');
         $variable_ids = json_encode($variable_ids);
 
-
-
-//        $validatedData = $request->validated();
-//        $validatedData['user_id'] = $request->user()->id;
-//        $blogPost = BlogPost::create($validatedData);
-//
-//
-//        if ($request->hasFile('thumbnail'))
-//        {
-//            $path = $request->file('thumbnail')->store('thumbnails');
-//            $blogPost->image()->save( Image::make(['path' => $path]) );
-//        }
-
         $id = Auth::id();
         $posts = Post::create([
             'variable_ids' => $variable_ids,
@@ -70,6 +59,17 @@ class PostController extends Controller
             'updated_by' => $id,
         ]);
 
+        $post_id = $posts->id;
+        PostHistory::create([
+            'post_id' => $post_id,
+            'variable_ids' => $variable_ids,
+            'title' => $title,
+            'description' => $description,
+            'content' => $content,
+            'sub_category_id' => $sub_category_id,
+            'created_by' => $id,
+        ]);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Post created successfully',
@@ -77,20 +77,60 @@ class PostController extends Controller
         ]);
     }
 
+
+    public function revert(Request $request): JsonResponse
+    {
+        $post_id = $request->input('post_id');
+        $post_history_id = $request->input('post_history_id');
+
+        $PostHistory = PostHistory::find($post_history_id);
+
+        $post = Post::find($post_id);
+
+        $post->title = $PostHistory->title;
+        $post->description = $PostHistory->description;
+        $post->content = $PostHistory->content;
+        $post->sub_category_id = $PostHistory->sub_category_id;
+        $post->variable_ids = $PostHistory->variable_ids;
+        $post->updated_by = $PostHistory->created_by;
+
+        $post->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Post reverted successfully',
+            'posts' => $post,
+        ]);
+    }
+
+
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Post $post
-     * @return JsonResponse|\Illuminate\Http\Response
+     * @param int $post_id
+     * @return JsonResponse|Response
      */
-    public function show($post_id)
+    public function show(int $post_id): \Illuminate\Http\Response|JsonResponse
     {
         $posts = Post::find($post_id);
 
-//        dd($post_id,'post');
+        $post_histories = PostHistory::where('post_id', $post_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Post created successfully',
+            'posts' => $posts,
+            'post_histories' => $post_histories,
+        ]);
+    }
+
+    public function show_history(int $post_history_id): \Illuminate\Http\Response|JsonResponse
+    {
+        $posts = PostHistory::find($post_history_id);
+
+        return response()->json([
+            'status' => 'success',
             'posts' => $posts,
         ]);
     }
@@ -99,22 +139,80 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $post_id)
     {
-        //
+        $post = Post::find($post_id);
+
+        if (is_null($post)) {
+            return response()->json([
+                'status' => 'Failed',
+                'message' => "Post with ID:{$post_id} not found",
+                'post_id' => $post_id,
+            ]);
+        }
+
+        $created_by = $post->created_by;
+        $title = $request->input('title') ?? $post->title;
+        $description = $request->input('description') ?? $post->description;
+        $content = $request->input('content') ?? $post->content;
+        $sub_category_id = $request->input('sub_category_id') ?? $post->sub_category_id;
+
+        $variable_ids = $request->input('variable_ids');
+        if (empty($variable_ids)) {
+            $variable_ids = $post->variable_ids;
+        } else {
+            $variable_ids = json_encode($variable_ids);
+        }
+
+        $id = Auth::id();
+        PostHistory::create([
+            'post_id' => $post_id,
+            'variable_ids' => $variable_ids,
+            'title' => $title,
+            'description' => $description,
+            'content' => $content,
+            'sub_category_id' => $sub_category_id,
+            'created_by' => $id,
+        ]);
+
+        $post->title = $title;
+        $post->description = $description;
+        $post->content = $content;
+        $post->sub_category_id = $sub_category_id;
+        $post->variable_ids = $variable_ids;
+        $post->created_by = $created_by;
+        $post->updated_by = $id;
+        $post->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Post updated successfully',
+            'posts' => $post,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return JsonResponse
      */
-    public function destroy(Post $post)
+    public function destroy($post_id)
     {
-        //
+
+        $post = Post::find($post_id);
+        $post->delete();
+
+        PostHistory::where('post_id', $post_id)
+            ->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Post deleted successfully',
+            'posts' => $post,
+        ]);
     }
 }
