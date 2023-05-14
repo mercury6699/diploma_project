@@ -15,7 +15,7 @@ class PostController extends Controller
 {
     public function __construct()
     {
-//        $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -81,7 +81,6 @@ class PostController extends Controller
 
     public function revert(Request $request): JsonResponse
     {
-
 
 
         $post_id = $request->input('post_id');

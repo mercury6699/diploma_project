@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Response;
 
 class ImageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -42,7 +46,6 @@ class ImageController extends Controller
     {
 
         $image_path = $request->file('image')->store('images');
-
 
 
 //        $ip = '127.0.0.1';
@@ -79,7 +82,7 @@ class ImageController extends Controller
 
         $type = File::mimeType($path);
 
-        $response = Response::make($file,200);
+        $response = Response::make($file, 200);
 
         $response->header("Content-Type", $type);
 
