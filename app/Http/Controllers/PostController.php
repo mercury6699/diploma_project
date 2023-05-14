@@ -133,14 +133,12 @@ class PostController extends Controller
      */
     public function show(int $post_id): \Illuminate\Http\Response|JsonResponse
     {
-        $posts = Post::find($post_id)->get();
+        $posts = Post::find($post_id);
 
-        foreach ($posts as $post) {
-            $SubCategory = SubCategory::find($post->sub_category_id);
-            $Category = Category::find($SubCategory->category_id);
-            $post->category_name = $Category->title;
-            $post->sub_category_name = $SubCategory->title;
-        }
+        $SubCategory = SubCategory::find($posts->sub_category_id);
+        $Category = Category::find($SubCategory->category_id);
+        $posts->category_name = $Category->title;
+        $posts->sub_category_name = $SubCategory->title;
 
         $post_histories = PostHistory::where('post_id', $post_id)
             ->orderBy('created_at', 'desc')
