@@ -104,7 +104,7 @@ class PostController extends Controller
             $post_history->save();
         }
 
-        $PostHistory = PostHistory::find($post_history_id);
+        $PostHistory = PostHistory::find($post_history_id)->get();
 
         $post = Post::find($post_id);
 
@@ -133,7 +133,7 @@ class PostController extends Controller
      */
     public function show(int $post_id): \Illuminate\Http\Response|JsonResponse
     {
-        $posts = Post::find($post_id);
+        $posts = Post::find($post_id)->get();
 
         foreach ($posts as $post) {
             $SubCategory = SubCategory::find($post->sub_category_id);
