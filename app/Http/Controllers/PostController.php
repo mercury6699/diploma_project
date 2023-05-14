@@ -180,6 +180,15 @@ class PostController extends Controller
             ]);
         }
 
+        $post_histories_current = PostHistory::where('post_id', $post_id)
+            ->where('is_current', 1)
+            ->get();
+
+        foreach ($post_histories_current as $post_history) {
+            $post_history->is_current = false;
+            $post_history->save();
+        }
+
         $created_by = $post->created_by;
         $title = $request->input('title') ?? $post->title;
         $description = $request->input('description') ?? $post->description;
@@ -202,6 +211,7 @@ class PostController extends Controller
             'content' => $content,
             'sub_category_id' => $sub_category_id,
             'created_by' => $id,
+            'is_current' => true,
         ]);
 
         $post->title = $title;
