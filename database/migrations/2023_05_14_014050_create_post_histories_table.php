@@ -22,6 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('post_id');
             $table->integer('created_by');
             $table->json('variable_ids');
+            $table->boolean('is_current');
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class PostHistory extends Model
         'updated_by',
         'updated_at',
         'post_id',
+        'is_current',
     ];
 
     protected function serializeDate(\DateTimeInterface $date): string

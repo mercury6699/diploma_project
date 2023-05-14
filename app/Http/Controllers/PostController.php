@@ -68,6 +68,7 @@ class PostController extends Controller
             'content' => $content,
             'sub_category_id' => $sub_category_id,
             'created_by' => $id,
+            'is_current' => true,
         ]);
 
         return response()->json([
@@ -80,8 +81,20 @@ class PostController extends Controller
 
     public function revert(Request $request): JsonResponse
     {
+
+
+
         $post_id = $request->input('post_id');
         $post_history_id = $request->input('post_history_id');
+
+        $post_histories_current = PostHistory::where('post_id', $post_id)
+            ->where('is_current', 1)
+            ->get();
+
+        foreach ($post_histories_current as $post_history) {
+            $post_history->is_current = false;
+            $post_history->save();
+        }
 
         $PostHistory = PostHistory::find($post_history_id);
 
