@@ -44,8 +44,8 @@ Route::controller(\App\Http\Controllers\PostController::class)->group(function (
     Route::put('post/{post_id}', 'update');
     Route::delete('post/{post_id}', 'destroy');
 
-    Route::post('post_revert', 'revert');
     Route::get('post_history/{post_history_id}', 'show_history');
+    Route::post('post_revert', 'revert');
 
 });
 

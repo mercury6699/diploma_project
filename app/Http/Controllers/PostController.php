@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostHistory;
+use App\Models\SubCategory;
 use App\Models\Variable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +28,13 @@ class PostController extends Controller
     public function index(): \Illuminate\Http\Response|JsonResponse
     {
         $posts = Post::all();
+        foreach ($posts as $post) {
+            $SubCategory = SubCategory::find($post->sub_category_id);
+            $Category = Category::find($SubCategory->category_id);
+            $post->category_name = $Category->title;
+            $post->sub_category_name = $SubCategory->title;
+        }
+
         return response()->json([
             'status' => 'success',
             'posts' => $posts,
@@ -125,6 +134,13 @@ class PostController extends Controller
     public function show(int $post_id): \Illuminate\Http\Response|JsonResponse
     {
         $posts = Post::find($post_id);
+
+        foreach ($posts as $post) {
+            $SubCategory = SubCategory::find($post->sub_category_id);
+            $Category = Category::find($SubCategory->category_id);
+            $post->category_name = $Category->title;
+            $post->sub_category_name = $SubCategory->title;
+        }
 
         $post_histories = PostHistory::where('post_id', $post_id)
             ->orderBy('created_at', 'desc')
