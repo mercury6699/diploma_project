@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -16,9 +18,9 @@ class ImageController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         $images = Image::all();
         return response()->json([
@@ -27,22 +29,14 @@ class ImageController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
 
         $image_path = $request->file('image')->store('images');
@@ -66,15 +60,15 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Image $image
+     * @param $file_name
      * @return \Illuminate\Http\Response
+     * @throws FileNotFoundException
      */
-    public function show($file_name)
+    public function show($file_name): \Illuminate\Http\Response
     {
-//        dd($file_name);
         $path = storage_path('app/images/' . $file_name);
 
-        if (!\Illuminate\Support\Facades\File::exists($path)) {
+        if (!File::exists($path)) {
             abort(404);
         }
 
@@ -87,39 +81,5 @@ class ImageController extends Controller
         $response->header("Content-Type", $type);
 
         return $response;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Image $image
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Image $image)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Image $image
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Image $image)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Image $image
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Image $image)
-    {
-        //
     }
 }
