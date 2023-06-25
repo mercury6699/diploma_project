@@ -24,8 +24,8 @@ class VariableController extends Controller
         foreach ($variables as $var) {
             $Category = Category::find($var->category_id);
             $SubCategory = SubCategory::find($var->sub_category_id);
-            $var->category_name = $Category->title;
-            $var->sub_category_name = $SubCategory->title;
+            $var->category_name = $Category?->title;
+            $var->sub_category_name = $SubCategory?->title;
         }
 
         return response()->json([
