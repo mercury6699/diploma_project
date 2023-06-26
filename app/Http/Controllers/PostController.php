@@ -90,8 +90,6 @@ class PostController extends Controller
 
     public function revert(Request $request): JsonResponse
     {
-
-
         $post_id = $request->input('post_id');
         $post_history_id = $request->input('post_history_id');
 
@@ -140,8 +138,8 @@ class PostController extends Controller
 
         $SubCategory = SubCategory::find($posts->sub_category_id);
         $Category = Category::find($SubCategory->category_id);
-        $posts->category_name = $Category->title;
-        $posts->sub_category_name = $SubCategory->title;
+        $posts->category_name = $Category?->title;
+        $posts->sub_category_name = $SubCategory?->title;
 
         $post_histories = PostHistory::where('post_id', $post_id)
             ->orderBy('created_at', 'desc')
@@ -151,6 +149,17 @@ class PostController extends Controller
             'status' => 'success',
             'posts' => $posts,
             'post_histories' => $post_histories,
+        ]);
+    }
+
+    public function search(Request $request): \Illuminate\Http\Response|JsonResponse
+    {
+        $search_value= $request->input('search_value');
+        $posts = Post::where('title', 'LIKE', '%'.$search_value.'%')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'posts' => $posts,
         ]);
     }
 
