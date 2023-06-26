@@ -195,22 +195,12 @@ class PostController extends Controller
 
     public function  clear_search_history(): \Illuminate\Http\Response|JsonResponse
     {
-        $search_history = DB::table('search_history')
+        DB::table('search_history')
             ->where('is_deleted', false)
-            ->get();
-
-        if ($search_history->isNotEmpty()) {
-            foreach ($search_history as $row) {
-                $user_name = User::find($row->created_by)->name;
-                $row->user_name = $user_name;
-            }
-        }
-
-
+            ->update(['is_deleted' => true]);
 
         return response()->json([
             'status' => 'success',
-            'search_history' => $search_history,
         ]);
     }
 
