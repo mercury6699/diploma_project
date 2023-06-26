@@ -158,6 +158,7 @@ class PostController extends Controller
     {
         $value = $request->input('value');
         $posts = Post::where('title', 'LIKE', '%' . $value . '%')
+            ->orWhere('description', 'LIKE', '%' . $value . '%')
             ->get();
 
         $id = Auth::id();
