@@ -40,7 +40,8 @@ Route::controller(\App\Http\Controllers\VariableController::class)->group(functi
 Route::controller(\App\Http\Controllers\PostController::class)->group(function () {
     Route::get('posts', 'index');
     Route::post('post', 'store');
-    Route::post('search', 'search');
+    Route::post('post/search', 'search');
+    Route::get('post/search_history', 'search_history');
     Route::get('post/{post_id}', 'show');
     Route::put('post/{post_id}', 'update');
     Route::delete('post/{post_id}', 'destroy');

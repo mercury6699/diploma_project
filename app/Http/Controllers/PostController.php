@@ -7,11 +7,13 @@ use App\Models\Image;
 use App\Models\Post;
 use App\Models\PostHistory;
 use App\Models\SubCategory;
+use App\Models\User;
 use App\Models\Variable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -154,12 +156,61 @@ class PostController extends Controller
 
     public function search(Request $request): \Illuminate\Http\Response|JsonResponse
     {
-        $search_value= $request->input('search_value');
-        $posts = Post::where('title', 'LIKE', '%'.$search_value.'%')->get();
+        $value = $request->input('value');
+        $posts = Post::where('title', 'LIKE', '%' . $value . '%')
+            ->get();
+
+        $id = Auth::id();
+        DB::table('search_history')->insert([
+            'value' => $value,
+            'is_deleted' => false,
+            'created_by' => $id
+        ]);
 
         return response()->json([
             'status' => 'success',
             'posts' => $posts,
+        ]);
+    }
+
+    public function search_history(): \Illuminate\Http\Response|JsonResponse
+    {
+        $search_history = DB::table('search_history')
+            ->where('is_deleted', false)
+            ->get();
+
+        if ($search_history->isNotEmpty()) {
+            foreach ($search_history as $row) {
+                $user_name = User::find($row->created_by)->name;
+                $row->user_name = $user_name;
+            }
+        }
+
+
+        return response()->json([
+            'status' => 'success',
+            'search_history' => $search_history,
+        ]);
+    }
+
+    public function  clear_search_history(): \Illuminate\Http\Response|JsonResponse
+    {
+        $search_history = DB::table('search_history')
+            ->where('is_deleted', false)
+            ->get();
+
+        if ($search_history->isNotEmpty()) {
+            foreach ($search_history as $row) {
+                $user_name = User::find($row->created_by)->name;
+                $row->user_name = $user_name;
+            }
+        }
+
+
+
+        return response()->json([
+            'status' => 'success',
+            'search_history' => $search_history,
         ]);
     }
 
