@@ -44,7 +44,7 @@ class ImageController extends Controller
 
 //        $ip = '127.0.0.1';
         $ip = '195.49.212.252';
-        $url = $ip . '/api/image/' . explode("/", $image_path)[1];
+        $url = $ip . ':8080/api/image/' . explode("/", $image_path)[1];
         $images = Image::create([
             'path' => $image_path,
             'url' => $url,
